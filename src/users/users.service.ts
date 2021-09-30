@@ -5,9 +5,9 @@ import { User } from './interfaces/user.interface';
 @Injectable()
 export class UsersService {
   private readonly users: User[] = [
-    { id: 1, name: 'xanh' },
-    { id: 2, name: 'Tao' },
-    { id: 3, name: 'Bao' },
+    { id: 1, name: 'xanh', age: 15 },
+    { id: 2, name: 'Tao', age: 29 },
+    { id: 3, name: 'Bao', age: 20 },
   ];
 
   create(createUserDto: CreateUserDto) {
@@ -26,6 +26,8 @@ export class UsersService {
     }
     return this.users;
   }
+
+
   findById(userId: number) {
     return this.users.find((user) => user.id === userId);
   }

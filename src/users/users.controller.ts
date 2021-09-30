@@ -3,12 +3,15 @@ import {
   Body,
   Controller,
   Get,
+  HttpStatus,
   NotFoundException,
   Param,
+  ParseIntPipe,
   Post,
   Query,
 } from '@nestjs/common';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ForbiddenExceptionC } from 'src/customException/forbidden.exception';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './interfaces/user.interface';
 import { UsersService } from './users.service';
@@ -17,6 +20,7 @@ import { UsersService } from './users.service';
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
+
   // @Get()
   // findAll() {
   //   return 'Day la users';
@@ -37,9 +41,26 @@ export class UsersController {
   //   }
   // }
 
+  // @Get(':id')
+  // findOne(@Param('id') id: string): User {
+  //   const user = this.usersService.findById(Number(id));
+  //   if (!user) {
+  //     throw new NotFoundException();
+  //   }
+  //   return user;
+  // }
+
+  // pipe ParseIntPipe
+
   @Get(':id')
-  findOne(@Param('id') id: string): User {
-    const user = this.usersService.findById(Number(id));
+  findOne(
+    @Param(
+      'id',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
+    )
+    id: number,
+  ): User {
+    const user = this.usersService.findById(id);
     if (!user) {
       throw new NotFoundException();
     }
@@ -73,4 +94,7 @@ export class UsersController {
     }
     return user;
   }
+
+
+
 }
